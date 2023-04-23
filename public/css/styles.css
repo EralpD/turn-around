@@ -1,0 +1,24 @@
+
+body {
+  background-color: #E8ECEF;
+}
+
+.centered {
+    padding-top: 200px;
+    text-align: center;
+}
+
+.secret-text {
+  text-align: center;
+  font-size: 2rem;
+  color: #fff;
+  background-color: #000;
+}
+
+.btn-lg {
+  margin: 15px;
+}
+
+.fix{
+  margin-top: 50px;
+}
