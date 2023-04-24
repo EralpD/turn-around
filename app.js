@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const mongoose = require("mongoose");
 const encrypt = require("mongoose-encryption");
+const md5 = require("md5");
 
 var app = express()
 
@@ -18,6 +19,8 @@ app.listen(3000, () => {
     console.log("the port has started with 3000")
 })
 
+// console.log(md5("message"));
+
 
 
 const userSchema = new mongoose
@@ -26,7 +29,7 @@ const userSchema = new mongoose
     password: String
 })
    
-    .plugin(encrypt, {encryptionKey: process.env.ENCKEY, signingKey: process.env.SIGKEY, encryptedFields: ["password"]})
+// .plugin(encrypt, {encryptionKey: process.env.ENCKEY, signingKey: process.env.SIGKEY, encryptedFields: ["password"]})
 
 // console.log(process.env.ENCKEY);
 // console.log(process.env.SIGKEY);
@@ -36,6 +39,7 @@ const User = new mongoose.model("User", userSchema);
 
 app.route("/")
 .get((req, res) => {
+
     res.render("home");
 })
 
@@ -55,9 +59,7 @@ app.route("/login")
 
     User.findOne({email: email}).then(users => {
 
-        console.log(users);
-
-        if(users.password === password){
+        if(users.password === md5(password)){
             res.render("secrets");
         }else{
             console.log("The account didn t found, please check again");
@@ -78,7 +80,7 @@ app.route("/register")
 .post((req, res) => {
     const newUser = new User({
         email: req.body.username,
-        password: req.body.password
+        password: md5(req.body.password)
     });
 
     newUser.save().then(() => {
